@@ -74,6 +74,32 @@
                         
                         <audio src="audio/Materials0.wav" controls preload></audio>
                         
+                        
+                        <button class="playWAV">Play WAV</button>
+                        <button class="playMP3">Play MP3</button>
+
+                        <script>
+                        /**********************
+                        ******** AUDIO ********
+                        **********************/
+                        // load and play a sound.
+                        function playSound(path) {
+                          // audio supported?
+                          if (typeof window.Audio === 'function') {
+                            var audioElem = new Audio();
+                            audioElem.src = path;
+                            audioElem.play();
+                          }
+                        }
+                        // event listeners
+                        document.querySelector('.playWAV').addEventListener('click', function(){
+                          playSound('audio/Materials0.wav');
+                        });
+                        document.querySelector('.playMP3').addEventListener('click', function(){
+                          playSound('music.mp3');
+                        });
+                        </script>
+
                         <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
                     </div>
                 </div>
