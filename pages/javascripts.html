@@ -12,10 +12,10 @@
     <title>Simple Sidebar - Start Bootstrap Template</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -39,19 +39,19 @@
                     </a>
                 </li>
                 <li>
-                    <a href="index.html">Home</a>
+                    <a href="../index.html">Home</a>
                 </li>
                 <li>
-                    <a href="pages/javascripts.html">Max/Javascripts</a>
+                    <a href="#">Max/Javascripts</a>
                 </li>
                 <li>
-                    <a href="pages/matlab.html">Matlab</a>
+                    <a href="#">Matlab</a>
                 </li>
                 <li>
-                    <a href="pages/audio.html">Audio Examples</a>
+                    <a href="#">Audio Examples</a>
                 </li>
                 <li>
-                    <a href="pages/videos.html">Videos</a>
+                    <a href="#">Videos</a>
                 </li>
                 <li>
                     <a href="#">Services</a>
@@ -68,37 +68,37 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1>Webpage Introduction</h1>
-                        <p>This template has a responsive menu toggling system. The menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will appear/disappear. On small screens, the page content will be pushed off canvas.</p>
+                        <h1>Max/Javascripts</h1>
+                        <p>Contains all scripts and stuff</p>
                         <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>.</p>
-                        
-                        <audio src="audio/Materials0.wav" controls preload></audio>
-                        
-                        
-                        <button class="playWAV">Play WAV</button>
-                        <button class="playMP3">Play MP3</button>
+                        <p><a href="../../MaxPatch/VSS_Patch_lewis/loadFilesLogic.js">loadFilesLogic.js</a>: A js file used to convert the user interface coordinates into an appropriate file name</p>
+                        <p><a href="../../MaxPatch/VSS_Patch_lewis/lineSelector.js">lineSelector.js</a>: Selects which lines to do stuff with</p>
 
-                        <script>
-                        /**********************
-                        ******** AUDIO ********
-                        **********************/
-                        // load and play a sound.
-                        function playSound(path) {
-                          // audio supported?
-                          if (typeof window.Audio === 'function') {
-                            var audioElem = new Audio();
-                            audioElem.src = path;
-                            audioElem.play();
-                          }
-                        }
-                        // event listeners
-                        document.querySelector('.playWAV').addEventListener('click', function(){
-                          playSound('audio/Materials0.wav');
-                        });
-                        document.querySelector('.playMP3').addEventListener('click', function(){
-                          playSound('music.mp3');
-                        });
-                        </script>
+  
+    
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th><a href="../../MaxPatch/VSS_Patch_lewis/loadFilesLogic.js">loadFilesLogic.js</a></th>
+                                <th>A js file used to convert the user interface coordinates into an appropriate file name</th>
+                            </tr>
+                            <tr>
+                                <th>sdf</th>
+                                <th>sdf</th>
+                            </tr>
+                            <tr>
+                                <th>fg</th>
+                                <th>g</th>
+                            </tr>
+                        </tbody>
+                    </table>
+
 
                         <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
                     </div>

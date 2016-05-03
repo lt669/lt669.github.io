@@ -12,10 +12,10 @@
     <title>Simple Sidebar - Start Bootstrap Template</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="css/simple-sidebar.css" rel="stylesheet">
+    <link href="../css/simple-sidebar.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -39,7 +39,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="index.html">Home</a>
+                    <a href="../index.html">Home</a>
                 </li>
                 <li>
                     <a href="pages/javascripts.html">Max/Javascripts</a>
@@ -68,39 +68,16 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1>Webpage Introduction</h1>
-                        <p>This template has a responsive menu toggling system. The menu will appear collapsed on smaller screens, and will appear non-collapsed on larger screens. When toggled using the button below, the menu will appear/disappear. On small screens, the page content will be pushed off canvas.</p>
-                        <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>.</p>
+                        <h1>Videos</h1>
+                        <p>This page contains video examples described in the dissertation</p>
                         
-                        <audio src="audio/Materials0.wav" controls preload></audio>
-                        
-                        
-                        <button class="playWAV">Play WAV</button>
-                        <button class="playMP3">Play MP3</button>
-
-                        <script>
-                        /**********************
-                        ******** AUDIO ********
-                        **********************/
-                        // load and play a sound.
-                        function playSound(path) {
-                          // audio supported?
-                          if (typeof window.Audio === 'function') {
-                            var audioElem = new Audio();
-                            audioElem.src = path;
-                            audioElem.play();
-                          }
-                        }
-                        // event listeners
-                        document.querySelector('.playWAV').addEventListener('click', function(){
-                          playSound('audio/Materials0.wav');
-                        });
-                        document.querySelector('.playMP3').addEventListener('click', function(){
-                          playSound('music.mp3');
-                        });
-                        </script>
-
-                        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
+                        <p><a href="../../MaxPatch/video/dotMovement.m4v">video</a>: Selects which lines to do stuff with</p>
+                            <div align="right">
+                                <video width="400" controls>
+                                    <source src="../../MaxPatch/video/dotMovement.webm" type="video/webm">
+                                    Your browser does not support HTML5 video.
+                                </video>
+                            </div>
                     </div>
                 </div>
             </div>
