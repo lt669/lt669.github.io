@@ -1,3 +1,12 @@
+/*//////////////////////////////////////////////////////
+	Description
+	Patch that concatenates the input file number with
+	the appropriate file path to find the required
+	RIR file.
+
+	Author: Lewis Thresh
+*///////////////////////////////////////////////////////
+
 inlets = 3;
 outlets = 4;
 
@@ -8,6 +17,7 @@ var folder;
 var extension;
 var fileNumber //grid location number
 
+//Replace appropriate file path here
 //HD
 var path = "/Volumes/lt669 =)/MEng/Global\ Data\ File!/Test1"
 var pathBulk = "/Volumes/lt669 =)/MEng/Global\ Data\ File!/Bulk/TrimmedNew/44/1"
@@ -23,6 +33,7 @@ var pathBulk = "/Volumes/lt669 =)/MEng/Global\ Data\ File!/Bulk/TrimmedNew/44/1"
 function msg_int(input){
 	
 	if(inlet == 0){
+		//Search for correct file
 	if(input ==1){
 		filename1 = ""+path+"/"+folder+"/Trimmed/"+type+"Trimmed_9_2_0"+extension;
 		filename2 = ""+path+"/"+folder+"/Trimmed/"+type+"Trimmed_9_2_90"+extension;
@@ -43,12 +54,14 @@ function msg_int(input){
 		filename2 = ""+path+"/"+folder+"/Trimmed/"+type+"Trimmed_Desk_90"+extension;
 		filename3 = ""+path+"/"+folder+"/Trimmed/"+type+"Trimmed_Desk_180"+extension;
 		filename4 = ""+path+"/"+folder+"/Trimmed/"+type+"Trimmed_Desk_270"+extension;
-	}	
+	}
+	//Output 'open/filename'
 	outlet(0, "open",filename1);
 	outlet(1, "open",filename2);
 	outlet(2, "open",filename3);
 	outlet(3, "open",filename4);
 	}
+	//Change file path variables depeding on the input
 	else if(inlet == 1){
 	if(input == 0){
 		folder = "Real";
@@ -59,7 +72,7 @@ function msg_int(input){
 		extension = ".wav";
 		type = "44/"
 	}	
-	} else if (inlet == 2){
+	} else if (inlet == 2){ //Files used for user test #2
 		if(input == 1){
 			fileNumber = "128"
 		} else if (input == 2){

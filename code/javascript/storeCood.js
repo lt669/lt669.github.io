@@ -1,3 +1,12 @@
+/*//////////////////////////////////////////////////////
+	Description
+	Patch used to store the coordinates of the user
+	input, used to draw the user posistion dot on
+	the user interface
+
+	Author: Lewis Thresh
+*///////////////////////////////////////////////////////
+
 inlets = 6;
 outlets = 2;
 

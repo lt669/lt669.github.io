@@ -1,0 +1,149 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>calibrateAll</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-06"><meta name="DC.source" content="calibrateAll.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Load real RIRs</a></li><li><a href="#2">Manually set multiplier</a></li><li><a href="#3">Normalisation Loop</a></li></ul></div><h2>Load real RIRs<a name="1"></a></h2><pre class="codeinput">real = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/HH RIR/Version 2/Real RIRs/V4/Trimmed/44/*.Wav'</span>);
+</pre><h2>Manually set multiplier<a name="2"></a></h2><pre class="codeinput">mult = 0.03;
+mult_w = mult;
+mult_x = mult;
+mult_y = mult;
+mult_z = mult;
+</pre><h2>Normalisation Loop<a name="3"></a></h2><pre class="codeinput"><span class="keyword">for</span> i=1:length(real)
+    <span class="comment">%read in audio file</span>
+    real1 = audioread(real(i).name);
+
+    <span class="comment">% Split channels</span>
+    real_w = real1(:,1);
+    real_x = real1(:,2);
+    real_y = real1(:,3);
+    real_z = real1(:,4);
+
+    <span class="comment">% Calibrate</span>
+    realOut = zeros(length(real1),4);
+
+    <span class="keyword">for</span> k=1:length(real_w)
+        realOut(k,1) = real_w(k)*mult_w;
+    <span class="keyword">end</span>
+    <span class="keyword">for</span> k=1:length(real_x)
+        realOut(k,2) = real_x(k)*mult_x;
+    <span class="keyword">end</span>
+    <span class="keyword">for</span> k=1:length(real_y)
+        realOut(k,3) = real_y(k)*mult_y;
+    <span class="keyword">end</span>
+    <span class="keyword">for</span> k=1:length(real_z)
+        realOut(k,4) = real_z(k)*mult_z;
+    <span class="keyword">end</span>
+
+    <span class="comment">% Render new audio file</span>
+    newName = sprintf(<span class="string">'%s'</span>,real(i).name);
+    audiowrite(newName,realOut,44100);
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Load real RIRs
+real = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/HH RIR/Version 2/Real RIRs/V4/Trimmed/44/*.Wav');
+
+%% Manually set multiplier
+mult = 0.03;
+mult_w = mult;
+mult_x = mult;
+mult_y = mult;
+mult_z = mult;
+
+%% Normalisation Loop
+for i=1:length(real)
+    %read in audio file
+    real1 = audioread(real(i).name);
+
+    % Split channels
+    real_w = real1(:,1);
+    real_x = real1(:,2);
+    real_y = real1(:,3);
+    real_z = real1(:,4);
+
+    % Calibrate
+    realOut = zeros(length(real1),4);
+    
+    for k=1:length(real_w)
+        realOut(k,1) = real_w(k)*mult_w;
+    end
+    for k=1:length(real_x)
+        realOut(k,2) = real_x(k)*mult_x;
+    end
+    for k=1:length(real_y)
+        realOut(k,3) = real_y(k)*mult_y;
+    end
+    for k=1:length(real_z)
+        realOut(k,4) = real_z(k)*mult_z;
+    end
+
+    % Render new audio file
+    newName = sprintf('%s',real(i).name);
+    audiowrite(newName,realOut,44100);
+end
+##### SOURCE END #####
+--></body></html>

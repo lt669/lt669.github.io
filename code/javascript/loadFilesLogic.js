@@ -1,3 +1,11 @@
+/*//////////////////////////////////////////////////////
+	Description
+	Patch used to calculate a file number (1 - 240) 
+	based on the coordinates from the user interface.
+
+	Author: Lewis Thresh
+*///////////////////////////////////////////////////////
+
 inlets = 5;
 outlets = 1;
 
@@ -27,17 +35,17 @@ function msg_int(input){
 		numberOfMeters = input;
 	}
 	
-	//Split into sections
+	//Split lcd screen into sections
 	if(numberOfMeters == 3 || numberOfMeters == 5){
 		//Even grid for 3m and 5m
 		xPosition = (xPos/windowSize[0])*(numberOfMeters);
 		yPosition = (yPos/windowSize[1])*(numberOfMeters);
 	} else if (numberOfMeters == 4 || numberOfMeters == 8){
-		//4m separation requires different x,y coordinate scaling
+		//2m & 4m separation requires different x,y coordinate scaling
 		xPosition = (xPos/windowSize[0])*(numberOfMeters-1);
 		yPosition = (yPos/windowSize[1])*(numberOfMeters);
 	} else{
-		//Extra row for others
+		//Extra row for 1m seperation
 		xPosition = (xPos/windowSize[0])*(numberOfMeters); 
 		yPosition = (yPos/windowSize[1])*(numberOfMeters+1);
 	}	

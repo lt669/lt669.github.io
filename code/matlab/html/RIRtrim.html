@@ -1,0 +1,232 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>RIRtrim</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-06"><meta name="DC.source" content="RIRtrim.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Locate files</a></li><li><a href="#3">Trim 8 second padding</a></li><li><a href="#4">Full length 44.1kHz  RIR file locations</a></li><li><a href="#5">trim full length 44.1kHz RIRs instead of down sampling trimmed 96Hz RIRs</a></li></ul></div><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% Description: The following script can be used to trim audio files.</span>
+<span class="comment">% The files were initially trimmed to remove 8 second padding.</span>
+<span class="comment">% They were later re-trimmed to account for system latency.</span>
+<span class="comment">%</span>
+<span class="comment">% Author: Lewis Thresh</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+</pre><h2>Locate files<a name="2"></a></h2><pre class="codeinput">rir_0 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/0/*.wav'</span>);
+rir_90 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/90/*.wav'</span>);
+rir_180 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/180/*.wav'</span>);
+rir_270 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/270/*.wav'</span>);
+
+rir_0_96 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/Original/96/1/0/*.wav'</span>);
+
+<span class="comment">%calulate number of samples in 8 seconds for 96kHz (REAL RIRs)</span>
+start = round(0.05193*96000);
+</pre><h2>Trim 8 second padding<a name="3"></a></h2><pre class="codeinput"><span class="keyword">for</span> k = 1:length(rir_0)
+    xTemp_0 = audioread(rir_0(k).name);
+    xTemp_90 = audioread(rir_90(k).name);
+    xTemp_180 = audioread(rir_180(k).name);
+    xTemp_270 = audioread(rir_270(k).name);
+
+    <span class="comment">%Read audio in starting from 8 seconds</span>
+    x0 = audioread(rir_0(k).name,[start length(xTemp_0)]);
+    x90 = audioread(rir_90(k).name,[start length(xTemp_90)]);
+    x180 = audioread(rir_180(k).name,[start length(xTemp_180)]);
+    x270 = audioread(rir_270(k).name,[start length(xTemp_270)]);
+
+    <span class="comment">%Prepend name with 'Trimmed_'</span>
+    newName1 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/HH RIR/Version 2/ODEON RIRs/New RIRs/Trimmed/Trimmed_%s'</span>,rir_0(k).name);
+    newName2 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/90/Trimmed_%s'</span>,rir_90(k).name);
+    newName3 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/180/Trimmed_%s'</span>,rir_180(k).name);
+    newName4 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/270/Trimmed_%s'</span>,rir_270(k).name);
+
+    <span class="comment">%Write audio out with 8 seconds off the beggining</span>
+    audiowrite(newName1,x0,96000);
+    audiowrite(newName2,x90,96000);
+    audiowrite(newName3,x180,96000);
+    audiowrite(newName4,x270,96000);
+
+<span class="keyword">end</span>
+</pre><h2>Full length 44.1kHz  RIR file locations<a name="4"></a></h2><pre class="codeinput">rir_0 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/44/1/0/*.wav'</span>);
+rir_90 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/44/1/90/*.wav'</span>);
+rir_180 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/44/1/180/*.wav'</span>);
+rir_270 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/44/1/270/*.wav'</span>);
+
+<span class="comment">%calulate number of samples in 22ms for 44.1kHz RIRs</span>
+start = round(0.05193*44100);
+</pre><h2>trim full length 44.1kHz RIRs instead of down sampling trimmed 96Hz RIRs<a name="5"></a></h2><pre class="codeinput"><span class="comment">%Loop through directory and trim each file</span>
+<span class="keyword">for</span> k = 1:length(rir_0)
+    <span class="comment">%Load audio files</span>
+    xTemp_0 = audioread(rir_0(k).name);
+    xTemp_90 = audioread(rir_90(k).name);
+    xTemp_180 = audioread(rir_180(k).name);
+    xTemp_270 = audioread(rir_270(k).name);
+
+    <span class="comment">%Read audio in starting from 22ms</span>
+    x0 = audioread(rir_0(k).name,[start length(xTemp_0)]);
+    x90 = audioread(rir_90(k).name,[start length(xTemp_90)]);
+    x180 = audioread(rir_180(k).name,[start length(xTemp_180)]);
+    x270 = audioread(rir_270(k).name,[start length(xTemp_270)]);
+
+    <span class="comment">%Prepend file names with 'Trimmed_'</span>
+    newName1 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/0/Trimmed_%s'</span>,rir_0(k).name);
+    newName2 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/90/Trimmed_%s'</span>,rir_90(k).name);
+    newName3 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/180/Trimmed_%s'</span>,rir_180(k).name);
+    newName4 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/270/Trimmed_%s'</span>,rir_270(k).name);
+
+    <span class="comment">%Save trimmed audio</span>
+    audiowrite(newName1,x0,96000);
+    audiowrite(newName2,x90,96000);
+    audiowrite(newName3,x180,96000);
+    audiowrite(newName4,x270,96000);
+
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Description: The following script can be used to trim audio files.
+% The files were initially trimmed to remove 8 second padding.
+% They were later re-trimmed to account for system latency.
+%
+% Author: Lewis Thresh
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Locate files
+rir_0 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/0/*.wav');
+rir_90 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/90/*.wav');
+rir_180 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/180/*.wav');
+rir_270 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/270/*.wav');
+
+rir_0_96 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/Original/96/1/0/*.wav');
+
+%calulate number of samples in 8 seconds for 96kHz (REAL RIRs)
+start = round(0.05193*96000);
+
+%% Trim 8 second padding
+for k = 1:length(rir_0)
+    xTemp_0 = audioread(rir_0(k).name);
+    xTemp_90 = audioread(rir_90(k).name);
+    xTemp_180 = audioread(rir_180(k).name);
+    xTemp_270 = audioread(rir_270(k).name);
+
+    %Read audio in starting from 8 seconds
+    x0 = audioread(rir_0(k).name,[start length(xTemp_0)]);
+    x90 = audioread(rir_90(k).name,[start length(xTemp_90)]);
+    x180 = audioread(rir_180(k).name,[start length(xTemp_180)]);
+    x270 = audioread(rir_270(k).name,[start length(xTemp_270)]);
+    
+    %Prepend name with 'Trimmed_'
+    newName1 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/HH RIR/Version 2/ODEON RIRs/New RIRs/Trimmed/Trimmed_%s',rir_0(k).name);
+    newName2 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/90/Trimmed_%s',rir_90(k).name);
+    newName3 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/180/Trimmed_%s',rir_180(k).name);
+    newName4 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/270/Trimmed_%s',rir_270(k).name);
+
+    %Write audio out with 8 seconds off the beggining
+    audiowrite(newName1,x0,96000);
+    audiowrite(newName2,x90,96000);
+    audiowrite(newName3,x180,96000);
+    audiowrite(newName4,x270,96000);
+
+end
+
+%% Full length 44.1kHz  RIR file locations
+
+rir_0 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/44/1/0/*.wav');
+rir_90 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/44/1/90/*.wav');
+rir_180 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/44/1/180/*.wav');
+rir_270 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/44/1/270/*.wav');
+
+%calulate number of samples in 22ms for 44.1kHz RIRs
+start = round(0.05193*44100);
+
+%% trim full length 44.1kHz RIRs instead of down sampling trimmed 96Hz RIRs
+%Loop through directory and trim each file
+for k = 1:length(rir_0)
+    %Load audio files
+    xTemp_0 = audioread(rir_0(k).name);
+    xTemp_90 = audioread(rir_90(k).name);
+    xTemp_180 = audioread(rir_180(k).name);
+    xTemp_270 = audioread(rir_270(k).name);
+
+    %Read audio in starting from 22ms
+    x0 = audioread(rir_0(k).name,[start length(xTemp_0)]);
+    x90 = audioread(rir_90(k).name,[start length(xTemp_90)]);
+    x180 = audioread(rir_180(k).name,[start length(xTemp_180)]);
+    x270 = audioread(rir_270(k).name,[start length(xTemp_270)]);
+
+    %Prepend file names with 'Trimmed_'
+    newName1 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/0/Trimmed_%s',rir_0(k).name);
+    newName2 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/90/Trimmed_%s',rir_90(k).name);
+    newName3 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/180/Trimmed_%s',rir_180(k).name);
+    newName4 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/270/Trimmed_%s',rir_270(k).name);
+
+    %Save trimmed audio
+    audiowrite(newName1,x0,96000);
+    audiowrite(newName2,x90,96000);
+    audiowrite(newName3,x180,96000);
+    audiowrite(newName4,x270,96000);
+    
+end
+
+##### SOURCE END #####
+--></body></html>

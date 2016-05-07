@@ -1,3 +1,11 @@
+/*//////////////////////////////////////////////////////
+	Description
+	Patch used to store the list of files names that
+	still need to be loaded into the convolution patches.
+
+	Author: Lewis Thresh
+*///////////////////////////////////////////////////////
+
 inlets = 3;
 outlets = 2;
 
@@ -5,8 +13,7 @@ var locationsArray = [];
 
 function msg_int(input){
 	if(inlet == 0){	//Stores all incoming positions in array
-		locationsArray.push(input);
-		post("\n",locationsArray.length);
+		locationsArray.push(input); //Add to the end of the array
 	}else if (inlet == 1){	//Outputs new position to load when timer is done and deletes it from array
 		if(input == 1){
 			if(locationsArray.length == 0){ //Signal array is empty or not

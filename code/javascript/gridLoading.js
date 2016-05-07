@@ -1,4 +1,10 @@
-//Patch to calulate the file number to load for the surrounding RIRs
+/*//////////////////////////////////////////////////////
+	Description
+	Patch used to calculate which RIRs to load
+	surrounding the centre RIR
+
+	Author: Lewis Thresh
+*///////////////////////////////////////////////////////
 inlets = 2;
 outlets = 12;
 

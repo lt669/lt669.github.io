@@ -1,3 +1,11 @@
+/*//////////////////////////////////////////////////////
+	Description
+	Patch that concatenates the input file number with
+	the appropriate file path to find the required
+	RIR file.
+
+	Author: Lewis Thresh
+*///////////////////////////////////////////////////////
 inlets = 3;
 outlets = 4;
 
@@ -6,13 +14,10 @@ var filename1, filename2, filename3, filename4;
 var sampleRate;
 
 // Audio Lab: /Users/audiolab/Desktop/VSS\ Patch\ Single\ RIR/Data/Trimmed/
-
 // Mac: /Users/Lewis/Uni\ Work/4th\ Year/Project/VSS\ Patch\ Audio\ Lab/Data/
-
 //External HD: /Volumes/lt669 =)/MEng/VSS Patch Single RIR/Data/Bulk/Trimmed/TrimmedNew
 
-//var path = "/Users/audiolab/Desktop/VSS\ Patch\ Single\ RIR/Data/Bulk/TrimmedNew/"
-//var path = "/Users/Lewis/Uni\ Work/4th\ Year/Project/VSS\ Patch\ Audio\ Lab/Data/"
+//Replace with appropriate file path here
 var path = "/Volumes/lt669 =)/MEng/Global\ Data\ File!/Bulk/TrimmedNew/"
 
 function msg_int(input){

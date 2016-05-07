@@ -23,13 +23,28 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+    <!-- Syntax Highlighting -->
+    <script type="text/javascript" src="../colour/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../colour/scripts/shBrushJScript.js"></script>
+	<link type="text/css" rel="stylesheet" href="../colour/styles/shCoreDefault.css"/>
+    
+<!--
+    <script type="text/javascript" src="js/shCore.js"></script>
+    <script type="text/javascript" src="css/shBrushJScript.js"></script>
+    <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+-->
 
 </head>
 
 <body>
+    
+
 
     <div id="wrapper">
 
+        <!-- Sidebar -->
         <!-- Sidebar -->
         <div id="sidebar-wrapper">
             <ul class="sidebar-nav">
@@ -42,22 +57,16 @@
                     <a href="../index.html">Home</a>
                 </li>
                 <li>
-                    <a href="#">Max/Javascripts</a>
+                    <a href="javascripts.html">Max/Javascripts</a>
                 </li>
                 <li>
-                    <a href="#">Matlab</a>
+                    <a href="matlab.html">Matlab</a>
                 </li>
                 <li>
-                    <a href="#">Audio Examples</a>
+                    <a href="audioSamples">Audio Examples</a>
                 </li>
                 <li>
-                    <a href="#">Videos</a>
-                </li>
-                <li>
-                    <a href="#">Services</a>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
+                    <a href="videos.html">Videos</a>
                 </li>
             </ul>
         </div>
@@ -71,6 +80,13 @@
                         <h1>Max/Javascripts</h1>
                         <p>Contains all scripts and stuff</p>
                         <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>.</p>
+                        
+                            <pre class="brush: js;">
+function helloSyntaxHighlighter()
+{
+	return "hi!";
+}
+</pre>
                         
                     <table class="table">
                         <thead>
@@ -87,12 +103,14 @@
                                 <th>Software:Max</th>
                             </tr>
                             <tr>
-                                <th>sdf</th>
-                                <th>sdf</th>
+                                <th><a href="../code/javascript/loadFilesLogic.js">loadFilesLogic.js</a></th>
+                                <th>A js file used to convert the user interface coordinates into an appropriate file name</th>
+                                <th>Software:Max</th>
                             </tr>
                             <tr>
-                                <th>fg</th>
-                                <th>g</th>
+                                <th><a href="../code/javascript/loadFilesLogic.js">loadFilesLogic.js</a></th>
+                                <th>A js file used to convert the user interface coordinates into an appropriate file name</th>
+                                <th>Software:Max</th>
                             </tr>
                         </tbody>
                     </table>
@@ -121,6 +139,8 @@
         $("#wrapper").toggleClass("toggled");
     });
     </script>
+    
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
 
 </body>
 

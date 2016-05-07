@@ -1,0 +1,467 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>renameSortFiles</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-05-06"><meta name="DC.source" content="renameSortFiles.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">RENAME FILES</a></li><li><a href="#3">SORT FILES</a></li><li><a href="#4">Loop (2m) (44.1k)</a></li><li><a href="#5">Loop (2m) (96k)</a></li><li><a href="#6">Loop (3m) (44.1k)</a></li><li><a href="#7">Loop (3m) (96k)</a></li><li><a href="#8">Loop (4m) (44.1k)</a></li><li><a href="#9">Loop (4m) (96k)</a></li><li><a href="#10">Loop (5m) (44.1k)</a></li><li><a href="#11">Loop (5m) (96k)</a></li></ul></div><pre class="codeinput"><span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% Description: The following script provides two functions:</span>
+<span class="comment">% 1) Prepend files names with 0's to ensure all file names are 3 digits long.</span>
+<span class="comment">% This allows them to be read by Matlab in acsending order using the 'dir' fuctionality.</span>
+<span class="comment">% 2) Extract the necessary audio files to produce a folder of RIR files for each grid (1m, 2m, 3m, 4m, 5m)</span>
+<span class="comment">%</span>
+<span class="comment">% Author: Lewis Thresh</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+</pre><h2>RENAME FILES<a name="2"></a></h2><pre class="codeinput"><span class="comment">%File file directories for files that need to be renamed</span>
+prenamed_0 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/0/*.Wav'</span>);
+prenamed_90 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/90/*.Wav'</span>);
+prenamed_180 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/180/*.Wav'</span>);
+prenamed_270 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/270/*.Wav'</span>);
+
+<span class="comment">%Add 0's before number</span>
+<span class="keyword">for</span> k=1:length(prenamed_0)
+
+    [~, f0] = fileparts(prenamed_0(k).name);
+    [~, f90] = fileparts(prenamed_90(k).name);
+    [~, f180] = fileparts(prenamed_180(k).name);
+    [~, f270] = fileparts(prenamed_270(k).name);
+
+    <span class="comment">% Convert to number</span>
+    num0 = str2double(f0);
+    num90 = str2double(f90);
+    num180 = str2double(f180);
+    num270 = str2double(f270);
+
+    <span class="comment">%Add prepending 0's to the file name and save to a new folder</span>
+    oldName1 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/0/%s'</span>,prenamed_0(k).name);
+    newName1 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/0/%03d_0.Wav'</span>, num0);
+    copyfile(oldName1, newName1);
+
+    oldName2 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/90/%s'</span>,prenamed_90(k).name);
+    newName2 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/90/%03d_90.Wav'</span>, num90);
+    copyfile(oldName2, newName2);
+
+    oldName3 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/180/%s'</span>,prenamed_180(k).name);
+    newName3 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/180/%03d_180.Wav'</span>, num180);
+    copyfile(oldName3, newName3);
+
+    oldName4 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/270/%s'</span>,prenamed_270(k).name);
+    newName4 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/270/%03d_270.Wav'</span>, num270);
+    copyfile(oldName4, newName4);
+<span class="keyword">end</span>
+</pre><h2>SORT FILES<a name="3"></a></h2><pre class="codeinput"><span class="comment">%Search for trimmed RIR files</span>
+rirs_0 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/0/*.Wav'</span>);
+rirs_90 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/90/*.Wav'</span>);
+rirs_180 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/180/*.Wav'</span>);
+rirs_270 = dir(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/270/*.Wav'</span>);
+</pre><h2>Loop (2m) (44.1k)<a name="4"></a></h2><pre class="codeinput">num = 0;
+<span class="keyword">for</span> k=2:(2*15):240 <span class="comment">%Start at position number 2 and jump two rows each time (2m)</span>
+    <span class="keyword">for</span> i=k:2:k+12 <span class="comment">%Increment in 2's untill final RIR location in the row has been reached</span>
+        num = num+1; <span class="comment">%Rename the files starting from 001</span>
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/0/%s'</span>,rirs_0(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/2/0/%03d_0.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/90/%s'</span>,rirs_90(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/2/90/%03d_90.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/180/%s'</span>,rirs_180(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/2/180/%03d_180.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/270/%s'</span>,rirs_270(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/2/270/%03d_270.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Loop (2m) (96k)<a name="5"></a></h2><pre class="codeinput">num = 0;
+<span class="keyword">for</span> k=2:(2*15):length(rirs_0)
+    <span class="keyword">for</span> i=k:2:k+12
+        num = num+1;
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/0/%s'</span>,rirs_0(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/2/0/%03d_0.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/90/%s'</span>,rirs_90(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/2/90/%03d_90.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/180/%s'</span>,rirs_180(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/2/180/%03d_0.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/270/%s'</span>,rirs_270(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/2/270/%03d_0.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Loop (3m) (44.1k)<a name="6"></a></h2><pre class="codeinput">num = 0;
+<span class="keyword">for</span> k=32:(3*15):240 <span class="comment">%Start at position number 32 and jump three rows each time (3m)</span>
+    <span class="keyword">for</span> i=k:3:k+12 <span class="comment">%Increment in 3's untill final RIR location in the row has been reached</span>
+        num = num+1;
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/0/%s'</span>,rirs_0(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/3/0/%03d_0.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/90/%s'</span>,rirs_90(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/3/90/%03d_90.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/180/%s'</span>,rirs_180(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/3/180/%03d_180.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/270/%s'</span>,rirs_270(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/3/270/%03d_270.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Loop (3m) (96k)<a name="7"></a></h2><pre class="codeinput">num = 0;
+<span class="keyword">for</span> k=32:(3*15):length(rir_0)
+    <span class="keyword">for</span> i=k:3:k+12
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/0/%s'</span>,rirs_0(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/3/0/%03d_0.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/90/%s'</span>,rirs_90(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/3/90/%03d_90.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/180/%s'</span>,rirs_180(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/3/180/%03d_180.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/270/%s'</span>,rirs_270(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/3/270/%03d_270.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Loop (4m) (44.1k)<a name="8"></a></h2><pre class="codeinput">num = 0;
+<span class="keyword">for</span> k=4:(4*15):240 <span class="comment">%Start at position number 4 and jump four rows each time (4m)</span>
+    <span class="keyword">for</span> i=k:4:k+8 <span class="comment">%Increment in 4's untill final RIR location in the row has been reached</span>
+        num = num+1;
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/0/%s'</span>,rirs_0(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/4/0/%03d_0.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/90/%s'</span>,rirs_90(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/4/90/%03d_90.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/180/%s'</span>,rirs_180(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/4/180/%03d_180.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/270/%s'</span>,rirs_270(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/4/270/%03d_270.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Loop (4m) (96k)<a name="9"></a></h2><pre class="codeinput">num = 0;
+<span class="keyword">for</span> k=4:(4*15):length(rir_0)
+    <span class="keyword">for</span> i=k:4:k+8
+        <span class="comment">% Convert to number</span>
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/0/%s'</span>,rirs_0(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/4/0/%03d_0.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/90/%s'</span>,rirs_90(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/4/90/%03d_90.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/180/%s'</span>,rirs_180(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/4/180/%03d_180.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/270/%s'</span>,rirs_270(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/4/270/%03d_270.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Loop (5m) (44.1k)<a name="10"></a></h2><pre class="codeinput">num = 0;
+<span class="keyword">for</span> k=48:(5*15):240 <span class="comment">%Start at position number 48 and jump five rows each time (5m)</span>
+    <span class="keyword">for</span> i=k:5:k+10 <span class="comment">%Increment in 5's untill final RIR location in the row has been reached</span>
+        num = num+1;
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/0/%s'</span>,rirs_0(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/5/0/%03d_0.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/90/%s'</span>,rirs_90(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/5/90/%03d_90.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/180/%s'</span>,rirs_180(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/5/180/%03d_180.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/270/%s'</span>,rirs_270(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/5/270/%03d_270.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><h2>Loop (5m) (96k)<a name="11"></a></h2><pre class="codeinput">num = 0;
+<span class="keyword">for</span> k=48:(5*15):length(rir_0)
+    <span class="keyword">for</span> i=k:5:k+10
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/0/%s'</span>,rirs_0(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/5/0/%03d_0.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/90/%s'</span>,rirs_90(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/5/90/%03d_90.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/180/%s'</span>,rirs_180(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/5/180/%03d_180.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/270/%s'</span>,rirs_270(i).name);
+        newName0 = sprintf(<span class="string">'/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/5/270/%03d_270.Wav'</span>, num);
+        copyfile(oldName0, newName0);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Description: The following script provides two functions:
+% 1) Prepend files names with 0's to ensure all file names are 3 digits long.
+% This allows them to be read by Matlab in acsending order using the 'dir' fuctionality.
+% 2) Extract the necessary audio files to produce a folder of RIR files for each grid (1m, 2m, 3m, 4m, 5m)
+%
+% Author: Lewis Thresh
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% RENAME FILES
+%File file directories for files that need to be renamed
+prenamed_0 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/0/*.Wav');
+prenamed_90 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/90/*.Wav');
+prenamed_180 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/180/*.Wav');
+prenamed_270 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/270/*.Wav');
+
+%Add 0's before number
+for k=1:length(prenamed_0)
+    
+    [~, f0] = fileparts(prenamed_0(k).name);
+    [~, f90] = fileparts(prenamed_90(k).name);
+    [~, f180] = fileparts(prenamed_180(k).name);
+    [~, f270] = fileparts(prenamed_270(k).name);
+       
+    % Convert to number
+    num0 = str2double(f0);
+    num90 = str2double(f90);
+    num180 = str2double(f180);
+    num270 = str2double(f270);
+    
+    %Add prepending 0's to the file name and save to a new folder
+    oldName1 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/0/%s',prenamed_0(k).name);
+    newName1 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/0/%03d_0.Wav', num0);
+    copyfile(oldName1, newName1);
+
+    oldName2 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/90/%s',prenamed_90(k).name);
+    newName2 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/90/%03d_90.Wav', num90);
+    copyfile(oldName2, newName2);
+
+    oldName3 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/180/%s',prenamed_180(k).name);
+    newName3 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/180/%03d_180.Wav', num180);
+    copyfile(oldName3, newName3);
+
+    oldName4 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/RIRs/270/%s',prenamed_270(k).name);
+    newName4 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/96/1/270/%03d_270.Wav', num270);
+    copyfile(oldName4, newName4);
+end
+%% SORT FILES
+%Search for trimmed RIR files
+rirs_0 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/0/*.Wav');
+rirs_90 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/90/*.Wav');
+rirs_180 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/180/*.Wav');
+rirs_270 = dir('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/270/*.Wav');
+%% Loop (2m) (44.1k)
+num = 0;
+for k=2:(2*15):240 %Start at position number 2 and jump two rows each time (2m)
+    for i=k:2:k+12 %Increment in 2's untill final RIR location in the row has been reached
+        num = num+1; %Rename the files starting from 001
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/0/%s',rirs_0(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/2/0/%03d_0.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/90/%s',rirs_90(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/2/90/%03d_90.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/180/%s',rirs_180(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/2/180/%03d_180.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/270/%s',rirs_270(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/2/270/%03d_270.Wav', num);
+        copyfile(oldName0, newName0);
+    end
+end
+%% Loop (2m) (96k)
+num = 0;
+for k=2:(2*15):length(rirs_0)
+    for i=k:2:k+12
+        num = num+1;
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/0/%s',rirs_0(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/2/0/%03d_0.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/90/%s',rirs_90(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/2/90/%03d_90.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/180/%s',rirs_180(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/2/180/%03d_0.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/270/%s',rirs_270(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/2/270/%03d_0.Wav', num);
+        copyfile(oldName0, newName0);
+    end
+end
+
+%% Loop (3m) (44.1k)
+num = 0;
+for k=32:(3*15):240 %Start at position number 32 and jump three rows each time (3m)
+    for i=k:3:k+12 %Increment in 3's untill final RIR location in the row has been reached
+        num = num+1;
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/0/%s',rirs_0(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/3/0/%03d_0.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/90/%s',rirs_90(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/3/90/%03d_90.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/180/%s',rirs_180(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/3/180/%03d_180.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/270/%s',rirs_270(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/3/270/%03d_270.Wav', num);
+        copyfile(oldName0, newName0);
+    end
+end
+%% Loop (3m) (96k)
+num = 0;
+for k=32:(3*15):length(rir_0)
+    for i=k:3:k+12
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/0/%s',rirs_0(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/3/0/%03d_0.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/90/%s',rirs_90(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/3/90/%03d_90.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/180/%s',rirs_180(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/3/180/%03d_180.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/270/%s',rirs_270(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/3/270/%03d_270.Wav', num);
+        copyfile(oldName0, newName0);
+    end
+end
+%% Loop (4m) (44.1k)
+num = 0;
+for k=4:(4*15):240 %Start at position number 4 and jump four rows each time (4m)
+    for i=k:4:k+8 %Increment in 4's untill final RIR location in the row has been reached
+        num = num+1;
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/0/%s',rirs_0(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/4/0/%03d_0.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/90/%s',rirs_90(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/4/90/%03d_90.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/180/%s',rirs_180(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/4/180/%03d_180.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/270/%s',rirs_270(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/4/270/%03d_270.Wav', num);
+        copyfile(oldName0, newName0);
+    end
+end
+%% Loop (4m) (96k)
+num = 0;
+for k=4:(4*15):length(rir_0)
+    for i=k:4:k+8
+        % Convert to number
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/0/%s',rirs_0(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/4/0/%03d_0.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/90/%s',rirs_90(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/4/90/%03d_90.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/180/%s',rirs_180(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/4/180/%03d_180.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/270/%s',rirs_270(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/4/270/%03d_270.Wav', num);
+        copyfile(oldName0, newName0);
+    end
+end
+%% Loop (5m) (44.1k)
+num = 0;
+for k=48:(5*15):240 %Start at position number 48 and jump five rows each time (5m)
+    for i=k:5:k+10 %Increment in 5's untill final RIR location in the row has been reached
+        num = num+1;
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/0/%s',rirs_0(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/5/0/%03d_0.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/90/%s',rirs_90(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/5/90/%03d_90.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/180/%s',rirs_180(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/5/180/%03d_180.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/1/270/%s',rirs_270(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/44/5/270/%03d_270.Wav', num);
+        copyfile(oldName0, newName0);
+    end
+end
+%% Loop (5m) (96k)
+num = 0;
+for k=48:(5*15):length(rir_0)
+    for i=k:5:k+10
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/0/%s',rirs_0(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/5/0/%03d_0.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/90/%s',rirs_90(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/5/90/%03d_90.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/180/%s',rirs_180(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/5/180/%03d_180.Wav', num);
+        copyfile(oldName0, newName0);
+        oldName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/1/270/%s',rirs_270(i).name);
+        newName0 = sprintf('/Users/Lewis/Uni Work/4th Year/Project/Room Measurements/ODEON/BulkRIRs/New RIRs/TrimmedNew/96/5/270/%03d_270.Wav', num);
+        copyfile(oldName0, newName0);
+    end
+end
+##### SOURCE END #####
+--></body></html>
