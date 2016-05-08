@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Simple Sidebar - Start Bootstrap Template</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../../../css/simple-sidebar.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <!-- Syntax Highlighting -->
+    <script type="text/javascript" src="../../../colour/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../../../colour/scripts/shBrushJScript.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../../colour/styles/shCoreDefault.css"/>
+    
+<!--
+    <script type="text/javascript" src="js/shCore.js"></script>
+    <script type="text/javascript" src="css/shBrushJScript.js"></script>
+    <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+-->
+
+</head>
+
+<body>
+    
+
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Lewis Thresh MEng Page
+                    </a>
+                </li>
+                <li>
+                    <a href="../../../index.html">Home</a>
+                </li>
+                <li>
+                    <a href="../../../pages/javascripts.html">Max/Javascripts</a>
+                </li>
+                <li>
+                    <a href="../../../pages/matlab.html">Matlab</a>
+                </li>
+                <li>
+                    <a href="../../../pages/audioSamples">Audio Examples</a>
+                </li>
+                <li>
+                    <a href="../../../pages/videos.html">Videos</a>
+                </li>   
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                    <pre class="brush: js;">
+///////////////////////////////////////////////////////
+	Description
+	Patch used to store the coordinates of the user
+	input, used to draw the user posistion dot on
+	the user interface
+
+	Author: Lewis Thresh
+///////////////////////////////////////////////////////
+
+inlets = 6;
+outlets = 2;
+
+var xLocation = [];
+var yLocation = [];
+var section = [];
+var length = 0;
+var timer;
+
+function msg_int(input){
+	//Add coordinate and sections to the end of each array with every new input
+	if(inlet == 0){
+		xLocation.push(input); //Store x coordinate
+	} else if (inlet == 1){
+		yLocation.push(input); //Store y coordinate
+	} else if (inlet == 2){
+		section.push(input); //Store current section location
+	} else if (inlet == 3){ //If timer is done
+		if(xLocation.length == 0){
+			//Dont output anything
+		}else{
+			if(section.length > 0){
+				findLength(); //Find how many (x,y) locations visited in one section
+				outputCounter = 0;
+			}
+		}	
+	} else if(inlet == 4){ //called every 100ms
+		timer = input;
+		if(section.length >= 1 && outputCounter < length){//Move dot untill all coordinates have been visited
+			outputCoords();
+		}
+	} else { //Clear arrays
+		xLocation = [];
+		yLocation = [];
+		section = [];
+		xCount = yCount = sCount = length = outputCounter = 0;
+		post("\n Location Arrays Cleared");
+		}
+}	
+
+//Determines how many different locations were moved to within one section
+function findLength(){
+	var	previousSection = section[0]; //Store current section number
+	for(i=0;i<section.length;i++){
+		if(previousSection == section[i]){
+			length = i+1;
+		} else {
+			break;
+		}	
+	}	
+}	
+
+//Output the coordinates for the dot to follow
+function outputCoords(){
+	if(timer >= (2500/length)){
+		//Output coordinates
+		outputCounter++;
+		outlet(0,xLocation[0]);
+		outlet(1,yLocation[0]);
+		xLocation.shift(); //Truncate arrays
+		yLocation.shift();
+		section.shift();
+	}
+}	
+
+                    </pre>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+    
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+
+</body>
+
+</html>

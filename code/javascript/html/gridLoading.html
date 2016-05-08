@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Simple Sidebar - Start Bootstrap Template</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../../../css/simple-sidebar.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <!-- Syntax Highlighting -->
+    <script type="text/javascript" src="../../../colour/scripts/shCore.js"></script>
+	<script type="text/javascript" src="../../../colour/scripts/shBrushJScript.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../../colour/styles/shCoreDefault.css"/>
+    
+<!--
+    <script type="text/javascript" src="js/shCore.js"></script>
+    <script type="text/javascript" src="css/shBrushJScript.js"></script>
+    <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+-->
+
+</head>
+
+<body>
+    
+
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Lewis Thresh MEng Page
+                    </a>
+                </li>
+                <li>
+                    <a href="../../../index.html">Home</a>
+                </li>
+                <li>
+                    <a href="../../../pages/javascripts.html">Max/Javascripts</a>
+                </li>
+                <li>
+                    <a href="../../../pages/matlab.html">Matlab</a>
+                </li>
+                <li>
+                    <a href="../../../pages/audioSamples">Audio Examples</a>
+                </li>
+                <li>
+                    <a href="../../../pages/videos.html">Videos</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                    <pre class="brush: js;">
+//////////////////////////////////////////////////////
+	Description
+	Patch used to calculate which RIRs to load
+	surrounding the centre RIR
+
+	Author: Lewis Thresh
+///////////////////////////////////////////////////////
+inlets = 2;
+outlets = 12;
+
+var numberOfMeters, top, bottom;
+
+function msg_int(input){
+	if(inlet == 1){
+		numberOfMeters = input;
+	}else if (inlet == 0){
+	
+		//Top row
+		l1 = input - numberOfMeters-1;
+		c1 = input - numberOfMeters;
+		r1 = input - numberOfMeters + 1;
+	
+		//Middle Row
+		l2 = input - 1;
+		c2 = input;
+		r2 = input + 1;
+		
+		//Bottom Row
+		l3 = input + (numberOfMeters-1);
+		c3 = input + numberOfMeters;
+		r3 = input + numberOfMeters + 1;
+		
+		z = c2 % (numberOfMeters);
+		//Prevent far right numbers from wrapping round grid
+		if(z == 0){ //If center is on far right, don't load new RIRs
+			r1 = r2 = r3 = 0;
+		}
+		if(z == 1){ //If on far left, don't load RIRs
+			l1 = l2 = l3 = 0;
+		}
+		
+		//Detect when top and bottom are out of bounds
+		if(c1 < 1){
+			top = 0;//Out of bounds
+		}else{
+			top = 1;
+		}
+		if(c3 > numberOfMeters*(numberOfMeters+1)){
+			bottom = 0;//Out of bounds
+		}else{
+			bottom = 1;
+		}
+		
+		//Print Grid
+		post("\n ----");
+		post("\n "+l1+" "+c1+" "+r1);
+		post("\n "+l2+" "+c2+" "+r2);
+		post("\n "+l3+" "+c3+" "+r3);
+		
+		//Send state of far left or far right position
+		outlet(0,z);
+		outlet(1,top);
+		outlet(2,bottom);
+		
+		//Send numbers to outlets
+		outlet(3,l1);
+		outlet(4,c1);
+		outlet(5,r1);
+		outlet(6,l2);
+		outlet(7,c2);
+		outlet(8,r2);
+		outlet(9,l3);
+		outlet(10,c3);
+		outlet(11,r3);
+	}
+}
+                    </pre>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+    
+    <script type="text/javascript">SyntaxHighlighter.all();</script>
+
+</body>
+
+</html>

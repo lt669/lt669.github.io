@@ -63,7 +63,7 @@
                     <a href="matlab.html">Matlab</a>
                 </li>
                 <li>
-                    <a href="audioSamples">Audio Examples</a>
+                    <a href="audioSamples.html">Audio Examples</a>
                 </li>
                 <li>
                     <a href="videos.html">Videos</a>
@@ -78,15 +78,8 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1>Max/Javascripts</h1>
-                        <p>Contains all scripts and stuff</p>
-                        <p>Make sure to keep all page content within the <code>#page-content-wrapper</code>.</p>
+                        <p>The following table provides links to all of the Javascript files used in the Max/MSP direct room impulse response rendering system along along with a short description and in which section of the document they are referenced.</p>
                         
-                            <pre class="brush: js;">
-function helloSyntaxHighlighter()
-{
-	return "hi!";
-}
-</pre>
                         
                     <table class="table">
                         <thead>
@@ -98,25 +91,58 @@ function helloSyntaxHighlighter()
                         </thead>
                         <tbody>
                             <tr>
-                                <th><a href="../code/javascript/loadFilesLogic.js">loadFilesLogic.js</a></th>
-                                <th>A js file used to convert the user interface coordinates into an appropriate file name</th>
+                                <th><a href="../code/javascript/html/gridLoading.html">gridLoading.js</a></th>
+                                <th>Converts the user interface coordinates into an appropriate file name</th>
                                 <th>Software:Max</th>
                             </tr>
                             <tr>
-                                <th><a href="../code/javascript/loadFilesLogic.js">loadFilesLogic.js</a></th>
-                                <th>A js file used to convert the user interface coordinates into an appropriate file name</th>
+                                <th><a href="../code/javascript/html/ifFirst.html">ifFirst.js</a></th>
+                                <th>Prevents the 3rd convolution patch from fading in when the first patch has faded in for the first time.</th>
                                 <th>Software:Max</th>
                             </tr>
                             <tr>
-                                <th><a href="../code/javascript/loadFilesLogic.js">loadFilesLogic.js</a></th>
-                                <th>A js file used to convert the user interface coordinates into an appropriate file name</th>
+                                <th><a href="../code/javascript/html/loadFiles.html">loadFiles.js</a></th>
+                                <th>Concatenates the input file number with the appropriate file path to find the required RIR file when using iPad interface.</th>
+                                <th>Software:Max</th>
+                            </tr>
+                            <tr>
+                                <th><a href="../code/javascript/html/loadFilesLogic.html">loadFilesLogic.js</a></th>
+                                <th>Calculates a file number (1 - 240) based on the coordinates from the user interface</th>
+                                <th>Software:Max</th>
+                            </tr>
+                            <tr>
+                                <th><a href="../code/javascript/html/loadFilesTest1.html">loadFilesTest1.js</a></th>
+                                <th>Concatenates the input file number with the appropriate file path to find the required RIR file for user test #1.
+</th>
+                                <th>Software:Max</th>
+                            </tr>
+                            <tr>
+                                <th><a href="../code/javascript/html/storeCood.html">storeCood.js</a></th>
+                                <th>Stores the coordinates of the user input, used to draw the user posistion dot on the user interface</th>
+                                <th>Software:Max</th>
+                            </tr>
+                            <tr>
+                                <th><a href="../code/javascript/html/storeLocations.html">storeLocations.js</a></th>
+                                <th>Stores the list of files names that still need to be loaded into the convolution patches.</th>
+                                <th>Software:Max</th>
+                            </tr>
+                            <tr>
+                                <th><a href="../code/javascript/html/switcher.html">switcher.js</a></th>
+                                <th>Routes the input signal to revolving convolution patches.</th>
+                                <th>Software:Max</th>
+                            </tr>
+                            <tr>
+                                <th><a href="../code/javascript/html/timerLogic.html">timerLogic.js</a></th>
+                                <th>Timer: Outputs a signal ever 2.5 seconds</th>
+                                <th>Software:Max</th>
+                            </tr>
+                            <tr>
+                                <th><a href="../code/javascript/html/wrapper.html">wrapper.js</a></th>
+                                <th>Keeps the input value between 0 - 360</th>
                                 <th>Software:Max</th>
                             </tr>
                         </tbody>
                     </table>
-
-
-                        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
                     </div>
                 </div>
             </div>
