@@ -77,13 +77,13 @@
                 <div class="row">
                     <div class="col-lg-12">
                     <pre class="brush: js;">
-///////////////////////////////////////////////////////
+/*//////////////////////////////////////////////////////
 	Description
 	Patch used to calculate a file number (1 - 240) 
 	based on the coordinates from the user interface.
 
 	Author: Lewis Thresh
-///////////////////////////////////////////////////////
+*///////////////////////////////////////////////////////
 
 inlets = 5;
 outlets = 1;
@@ -98,7 +98,7 @@ var windowSize = new Array(2);
 var fileX, fileY, search;
 
 //Defines how to split up the grid
-var numberOfMeters;
+var rowColCalc;
 
 //Loads appropriate files given users finger coordinates
 function msg_int(input){
@@ -111,22 +111,22 @@ function msg_int(input){
 	} else if (inlet == 3){
 		windowSize [1] = input;
 	} else if(inlet==4){
-		numberOfMeters = input;
+		rowColCalc = input;
 	}
 	
 	//Split lcd screen into sections
-	if(numberOfMeters == 3 || numberOfMeters == 5){
+	if(rowColCalc == 3 || rowColCalc == 5){
 		//Even grid for 3m and 5m
-		xPosition = (xPos/windowSize[0])*(numberOfMeters);
-		yPosition = (yPos/windowSize[1])*(numberOfMeters);
-	} else if (numberOfMeters == 4 || numberOfMeters == 8){
+		xPosition = (xPos/windowSize[0])*(rowColCalc);
+		yPosition = (yPos/windowSize[1])*(rowColCalc);
+	} else if (rowColCalc == 4 || rowColCalc == 8){
 		//2m & 4m separation requires different x,y coordinate scaling
-		xPosition = (xPos/windowSize[0])*(numberOfMeters-1);
-		yPosition = (yPos/windowSize[1])*(numberOfMeters);
+		xPosition = (xPos/windowSize[0])*(rowColCalc-1);
+		yPosition = (yPos/windowSize[1])*(rowColCalc);
 	} else{
 		//Extra row for 1m seperation
-		xPosition = (xPos/windowSize[0])*(numberOfMeters); 
-		yPosition = (yPos/windowSize[1])*(numberOfMeters+1);
+		xPosition = (xPos/windowSize[0])*(rowColCalc); 
+		yPosition = (yPos/windowSize[1])*(rowColCalc+1);
 	}	
 	
 	//Round to nearest value
@@ -160,12 +160,12 @@ function msg_int(input){
 		}
 		
 		//Output user location within grid
-		if(numberOfMeters == 4 || numberOfMeters == 8){
-			fileNumber = X + ((numberOfMeters-1)*(Y-1)); //Requires different algorithm for 2m and 4m due to different grid shape
+		if(rowColCalc == 4 || rowColCalc == 8){
+			fileNumber = X + ((rowColCalc-1)*(Y-1)); //Requires different algorithm for 2m and 4m due to different grid shape
 		} else {
-			fileNumber = X + ((numberOfMeters)*(Y-1));
+			fileNumber = X + ((rowColCalc)*(Y-1));
 		}	
-		outlet(1,fileNumber);
+		outlet(0,fileNumber);
 	}
 }
                     </pre>
